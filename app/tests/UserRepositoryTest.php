@@ -8,41 +8,30 @@ use Mobkly\Repositories\UserRepository;
  */
 class UserRepositoryTest extends TestCase {
 
-    public function test_save_user_by_user_repository()
+    public function setUp()
     {
-        if($user = User::where('email', '=', 'cnarez@clasificados.com')->first())
-        {
-                $user->delete();
-        }
-
-        $user = new User;
-        $user->username = 'carnar';
-        $user->email = 'cnarez@clasificados.com';
-
-        $repo = new UserRepository;
-        $response = $repo->register($user);
-
-        $this->assertTrue($response);
-
+        parent::setUp();
+        DB::beginTransaction();        
     }
 
-    public function test_save_user_by_user_repository_and_compare_usernames()
+    public function test_verify_data_type_returned_by_register()
     {
-        if($user = User::where('email', '=', 'cnarez@clasificados.com')->first())
-        {
-                $user->delete();
-        }
-        
         $user = new User;
         $user->username = 'carnar';
-        $user->email = 'cnarez@clasificados.com';
 
-        $repo = new UserRepository;
-        $response = $repo->register($user);
+        $repository = new UserRepository;
+        $expected = $repository->register($user);
 
-        $dbUser = User::where('email', '=', 'cnarez@clasificados.com')->first();
+        $this->assertTrue($expected);
+    }
 
-        $this->assertEquals('carnar', $dbUser->username);
-    }    
-
+    /**
+     * @expectedException ErrorException
+     */
+    public function test_throw_an_exception_with_array_as_register_parameter()
+    {
+        $user = [];
+        $repository = new UserRepository;
+        $expected = $repository->register($user);
+    }
 }

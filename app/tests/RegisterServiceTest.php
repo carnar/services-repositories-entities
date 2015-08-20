@@ -9,20 +9,18 @@ use Mobkly\Repositories\UserRepository;
  */
 class ResgisterUserTest extends TestCase {
 
+    public function setUp()
+    {
+        parent::setUp();
+        
+        DB::beginTransaction();        
+    }
+
     public function test_register_user()
     {
-        //
-        // TODO: Add Mocks
-        //
-         
-        if($user = User::where('email', '=', 'cnarez@clasificados.com')->first())
-        {
-                $user->delete();
-        }
-
         $user = new User;
         $user->username = 'carnar';
-        $user->email = 'cnarez@clasificados.com';
+        $user->email = 'cnarez@example.com';
 
         $registerService = new RegisterService(new UserRepository);
 

@@ -7,8 +7,6 @@ class UserRepository implements UserRepositoryInterface {
 
     public function register(UserEntityInterface $user)
     {
-        error_log('User was created');
-
         return $user->save();
     }
 
